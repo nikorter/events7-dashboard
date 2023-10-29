@@ -1,0 +1,33 @@
+version: "3.5"
+
+services:
+  backend:
+    build:
+      context: ./events7-backend
+      dockerfile: Dockerfile
+    container_name: events7-backend
+    ports:
+      - "3000:3000"
+    networks:
+      events7-network:
+        ipv4_address: 172.30.0.11
+  frontend:
+    hostname: events7.loc
+    domainname: events7.loc
+    build:
+      context: ./events7-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    networks:
+      events7-network:
+        ipv4_address: 172.30.0.12
+networks:
+  events7-network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.30.0.0/16
